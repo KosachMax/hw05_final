@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	{% include 'includes/head.html' %}
+	<title>
+		{% block title %}
+			Последние обновления на сайте
+		{% endblock %}
+	</title>
+</head>
+<body>
+{% include 'includes/header.html' %}
+<div class="container py-5">
+	<main>
+		<h1>
+			{% block heading %}
+				<!--Заголовок страницы-->
+			{% endblock %}
+		</h1>
+		{% block content %}
+			Тут скоро будут новости
+		{% endblock %}
+	</main>
+</div>
+{% include 'includes/footer.html' %}
+</body>
+</html>

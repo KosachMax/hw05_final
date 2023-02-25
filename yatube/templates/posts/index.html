@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}
+	Главная страница
+{% endblock %}
+{% block heading %}
+	Последние обновления на сайте
+{% endblock %}
+{% load cache %}
+{% cache 20 index_page %}
+{% block content %}
+{% include 'posts/includes/switcher.html' %}
+		{% for post in page_obj %}
+			{% include 'includes/post.html' %}
+			<a href="{% url 'posts:post_detail' post.id %}">подробная информация</a><br>
+			{% if post.group %}
+				<a href="{% url 'posts:group_list' post.group.slug %}">все записи группы</a>
+			{% endif %}
+			{% if not forloop.last %}
+				<hr>{% endif %}
+		{% endfor %}
+		{% include 'posts/includes/paginator.html' %}
+	</div>
+{% endblock %}
+{% endcache %}
