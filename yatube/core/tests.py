@@ -1,7 +1,6 @@
 from http import HTTPStatus
 
-from django.test import TestCase, Client
-from django.http import HttpResponseForbidden
+from django.test import TestCase
 
 
 class ViewTestClass(TestCase):
