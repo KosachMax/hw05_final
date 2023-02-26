@@ -8,13 +8,14 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 
-from posts.models import Post, Group, User, Comment
+from posts.models import Post, Group, User, Comment, Follow
 from yatube.settings import LATEST_POSTS_COUNT
 
 from .constants import (
     POST_CREATOR,
     SLUG,
     USERNAME,
+    REVERSE_FOLLOW_INDEX,
     REVERSE_INDEX,
     REVERSE_POST_CREATE,
     REVERSE_PROFILE,
@@ -82,6 +83,8 @@ class PostsViewsTest(TestCase):
         self.guest_client = Client()
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user)
+        self.authorized_author_client = Client()
+        self.authorized_author_client.force_login(self.author)
         cache.clear()
 
     def test_cache_index(self):
@@ -172,3 +175,45 @@ class PostsViewsTest(TestCase):
             with self.subTest(value=value):
                 form_field = response.context['form'].fields[value]
                 self.assertIsInstance(form_field, expected)
+
+
+class FollowTest(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.auth_user = User.objects.create_user(username='auth_user')
+        cls.auth_user_author = User.objects.create_user(
+            username='auth_user_author'
+        )
+        cls.post = Post.objects.create(
+            text='Test text',
+            author=cls.auth_user_author,
+        )
+        cls.REVERSE_PROFILE_FOLLOW = reverse(
+            'posts:profile_follow',
+            kwargs={'username': cls.auth_user_author.username}
+        )
+        cls.REVERSE_PROFILE_UNFOLLOW = reverse(
+            'posts:profile_unfollow',
+            kwargs={'username': cls.auth_user_author.username}
+        )
+
+    def setUp(self):
+        self.authorized_client = Client()
+        self.authorized_client.force_login(self.auth_user)
+        self.authorized_client_author = Client()
+        self.authorized_client_author.force_login(self.auth_user_author)
+
+    def test_auth_user_can_follow_and_unfollow_users(self):
+        """Авторизованный пользователь может
+        подписываться и отписываться от автора"""
+        self.authorized_client.get(self.REVERSE_PROFILE_FOLLOW)
+        self.assertEqual(Follow.objects.all().count(), 1)
+        self.authorized_client.get(self.REVERSE_PROFILE_UNFOLLOW)
+        self.assertEqual(Follow.objects.all().count(), 0)
+
+    def test_following_author_posts_shows_on_follow_page(self):
+        """Пост подписанного автора отображается на странице подписок"""
+        self.authorized_client.get(self.REVERSE_PROFILE_FOLLOW)
+        response = self.authorized_client.get(REVERSE_FOLLOW_INDEX)
+        self.assertEqual(response.context.get('post')[0], self.post)

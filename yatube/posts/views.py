@@ -29,10 +29,12 @@ def profile(request, username):
     template = 'posts/profile.html'
     author = get_object_or_404(User, username=username)
     posts = author.posts.select_related('author', 'group')
-    if request.user.is_authenticated:
-        following = Follow.objects.filter(
-            user=request.user, author=author
+    if request.user.is_authenticated and request.user != author:
+        following = Follow.objects.select_related(
+            'user', 'author'
         ).exists()
+    else:
+        following = False
     context = {
         'author': author,
         'following': following,

@@ -5,10 +5,16 @@ SLUG = 'test_slug'
 USERNAME = 'auth'
 POST_CREATOR = 'post_creator'
 
-REVERSE_INDEX = reverse("posts:main_page")
+REVERSE_INDEX = reverse('posts:main_page')
+REVERSE_FOLLOW_INDEX = reverse('posts:follow_index')
 REVERSE_POST_CREATE = reverse('posts:post_create')
 REVERSE_GROUP_LIST = reverse('posts:group_list', args=[SLUG])
 REVERSE_PROFILE = reverse("posts:profile", args=[USERNAME])
+REVERSE_PROFILE_FOLLOW = reverse('posts:profile_follow', args=[POST_CREATOR])
+REVERSE_PROFILE_UNFOLLOW = reverse(
+    'posts:profile_unfollow',
+    args=[POST_CREATOR]
+)
 
 INDEX_URL_NAME = 'posts:index'
 GROUP_LIST_URL_NAME = 'posts:group_list'
