@@ -30,6 +30,7 @@ POST_DETAIL_TEMPLATE = 'posts/post_detail.html'
 CREATE_POST_TEMPLATE = 'posts/create_post.html'
 
 UNEXISTING_URL = '/unexisting_page/'
+ADMIN_PAGE = '/admin/'
 CREATE_POST_URL = '/create/'
 CREATE_USER_URL = '/auth/login/?next=/create/'
 CRT_USER_REDIR_FROM_EDIT_URL = '/auth/login/?next=%2Fposts%2F1%2Fedit%2F'
