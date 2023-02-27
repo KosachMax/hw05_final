@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.db.models import UniqueConstraint
 
 from core.models import CreatedModel
 
@@ -38,7 +39,6 @@ class Post(CreatedModel):
         get_user_model(),
         on_delete=models.CASCADE,
         verbose_name='Автор',
-        related_name='posts',
         help_text='Тут указывается автор поста'
     )
     group = models.ForeignKey(
@@ -47,7 +47,6 @@ class Post(CreatedModel):
         verbose_name='Группа',
         blank=True,
         null=True,
-        related_name='posts',
         help_text='Создавайте группы по интересам'
     )
     image = models.ImageField(
@@ -57,6 +56,7 @@ class Post(CreatedModel):
     )
 
     class Meta:
+        default_related_name = 'posts'
         ordering = ('-created',)
         verbose_name = 'Пост'
         verbose_name_plural = 'Посты'
@@ -87,6 +87,15 @@ class Comment(CreatedModel):
         help_text='Напишите, о чем сейчас думаете'
     )
 
+    class Meta:
+        default_related_name = 'comments'
+        ordering = ('-created',)
+        verbose_name = 'Коммент'
+        verbose_name_plural = 'Комменты'
+
+    def __str__(self):
+        return self.text[:LETTERS_IN_POST]
+
 
 class Follow(CreatedModel):
     user = models.ForeignKey(
@@ -103,3 +112,12 @@ class Follow(CreatedModel):
         verbose_name='На кого подписывается',
         help_text='Тут указывается на кого подписывается'
     )
+    UniqueConstraint(
+        fields=['user', 'author'],
+        name='unique_follow_set'
+    )
+
+    class Meta:
+        ordering = ('-created',)
+        verbose_name = 'Избранный автор'
+        verbose_name_plural = 'Избранные авторы'

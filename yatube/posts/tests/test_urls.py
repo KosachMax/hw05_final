@@ -7,6 +7,7 @@ from .constants import (
     SLUG,
     USERNAME,
     INDEX_TEMPLATE,
+    FOLLOW_TEMPLATE,
     GROUP_LIST_TEMPLATE,
     PROFILE_TEMPLATE,
     POST_DETAIL_TEMPLATE,
@@ -16,8 +17,8 @@ from .constants import (
     CREATE_USER_URL,
     GROUP_LIST_URL,
     PROFILE_URL,
-    CRT_USER_REDIR_FROM_EDIT_URL
-
+    CRT_USER_REDIR_FROM_EDIT_URL,
+    FOLLOW_PAGE,
 )
 
 
@@ -40,15 +41,11 @@ class PostsUrlTest(TestCase):
         cls.POST_DETAIL_URL = f'/posts/{cls.post.id}/'
         cls.EDIT_POST_URL = f'/posts/{cls.post.id}/edit/'
         cls.COMMENT_POST_URL = f'/posts/{cls.post.id}/comment'
-
-    def setUp(self):
-        """Создаем экземпляр Юзера"""
-        self.guest_client = Client()
-        self.user = User.objects.create_user(username='HasNoName')
-        self.authorized_client = Client()
-        self.authorized_client.force_login(PostsUrlTest.user)
-        self.authorized_client_not_author = Client()
-        self.authorized_client_not_author.force_login(
+        cls.guest_client = Client()
+        cls.authorized_client = Client()
+        cls.authorized_client.force_login(PostsUrlTest.user)
+        cls.authorized_client_not_author = Client()
+        cls.authorized_client_not_author.force_login(
             PostsUrlTest.user_not_author
         )
 
@@ -61,6 +58,7 @@ class PostsUrlTest(TestCase):
             self.POST_DETAIL_URL: POST_DETAIL_TEMPLATE,
             CREATE_POST_URL: CREATE_POST_TEMPLATE,
             self.EDIT_POST_URL: CREATE_POST_TEMPLATE,
+            FOLLOW_PAGE: FOLLOW_TEMPLATE,
         }
         for address, template in templates_url_names.items():
             with self.subTest(address=address):

@@ -1,19 +1,19 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}
-	Все посты группы
+  Все посты группы
 {% endblock %}
 {% block heading %}
-	<h1>{{ group.title }}</h1>
-	<p>{{ group.description|linebreaks }}</p>
+  <h1>{{ group.title }}</h1>
+  <p>{{ group.description|linebreaks }}</p>
 {% endblock %}
 {% block content %}
-	<div class="container py-5">
-		{% for post in page_obj %}
-			{% include 'includes/post.html' %}
-			{% if not forloop.last %}
-				<hr>{% endif %}
-		{% endfor %}
-		{% include 'posts/includes/paginator.html' %}
-	</div>
+  <div class="container py-5">
+    {% for post in page_obj %}
+      {% include 'includes/post.html' %}
+      {% if not forloop.last %}
+        <hr>{% endif %}
+    {% endfor %}
+    {% include 'posts/includes/paginator.html' %}
+  </div>
 {% endblock %}

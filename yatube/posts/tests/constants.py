@@ -24,6 +24,7 @@ POST_COMMENT_URL_NAME = 'posts:add_comment'
 POST_EDIT_URL_NAME = 'posts:post_edit'
 
 INDEX_TEMPLATE = 'posts/index.html'
+FOLLOW_TEMPLATE = 'posts/follow.html'
 GROUP_LIST_TEMPLATE = 'posts/group_list.html'
 PROFILE_TEMPLATE = 'posts/profile.html'
 POST_DETAIL_TEMPLATE = 'posts/post_detail.html'
@@ -37,3 +38,15 @@ CRT_USER_REDIR_FROM_EDIT_URL = '/auth/login/?next=%2Fposts%2F1%2Fedit%2F'
 GROUP_LIST_URL = f'/group/{SLUG}/'
 PROFILE_URL = f'/profile/{USERNAME}/'
 POST_COMMENT = f'/posts/{POST_ID}/comment/'
+FOLLOW_PAGE = '/follow/'
+PROFILE_FOLLOW = f'/profile/{USERNAME}/follow/'
+PROFILE_UNFOLLOW = f'/profile/{USERNAME}/unfollow/'
+
+SMALL_GIF = (
+    b'\x47\x49\x46\x38\x39\x61\x02\x00'
+    b'\x01\x00\x80\x00\x00\x00\x00\x00'
+    b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
+    b'\x00\x00\x00\x2C\x00\x00\x00\x00'
+    b'\x02\x00\x01\x00\x00\x02\x02\x0C'
+    b'\x0A\x00\x3B'
+)

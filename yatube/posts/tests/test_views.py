@@ -20,6 +20,7 @@ from .constants import (
     REVERSE_POST_CREATE,
     REVERSE_PROFILE,
     GROUP_LIST_URL_NAME,
+    SMALL_GIF
 )
 
 TEMP_MEDIA_ROOT = tempfile.mkdtemp(dir=settings.BASE_DIR)
@@ -32,17 +33,9 @@ class PostsViewsTest(TestCase):
         super().setUpClass()
         cls.author = User.objects.create(username=POST_CREATOR)
         cls.user = User.objects.create_user(username=USERNAME)
-        cls.small_gif = (
-            b'\x47\x49\x46\x38\x39\x61\x02\x00'
-            b'\x01\x00\x80\x00\x00\x00\x00\x00'
-            b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
-            b'\x00\x00\x00\x2C\x00\x00\x00\x00'
-            b'\x02\x00\x01\x00\x00\x02\x02\x0C'
-            b'\x0A\x00\x3B'
-        )
         cls.uploaded = SimpleUploadedFile(
             name='small.gif',
-            content=cls.small_gif,
+            content=SMALL_GIF,
             content_type='image/gif'
         )
         cls.group = Group.objects.create(
@@ -72,20 +65,16 @@ class PostsViewsTest(TestCase):
             GROUP_LIST_URL_NAME,
             kwargs={"slug": cls.group.slug}
         )
+        cls.guest_client = Client()
+        cls.authorized_client = Client()
+        cls.authorized_client.force_login(cls.user)
+        cls.authorized_author_client = Client()
+        cls.authorized_author_client.force_login(cls.author)
 
     @classmethod
     def tearDownClass(cls):
         super().tearDownClass()
         shutil.rmtree(TEMP_MEDIA_ROOT, ignore_errors=True)
-
-    def setUp(self):
-        """Создаем клиенты для тестов"""
-        self.guest_client = Client()
-        self.authorized_client = Client()
-        self.authorized_client.force_login(self.user)
-        self.authorized_author_client = Client()
-        self.authorized_author_client.force_login(self.author)
-        cache.clear()
 
     def test_cache_index(self):
         """Проверка хранения и очищения кэша для index."""
@@ -105,6 +94,7 @@ class PostsViewsTest(TestCase):
 
     def test_index_show_correct_context(self):
         """Шаблон index.html сформирован с правильным контекстом."""
+        cache.clear()
         response = self.guest_client.get(REVERSE_INDEX)
         expected = list(Post.objects.all()[:LATEST_POSTS_COUNT])
         self.assertEqual(list(response.context["page_obj"]), expected)
@@ -121,9 +111,9 @@ class PostsViewsTest(TestCase):
 
     def test_comment_show_correct_context(self):
         response = self.authorized_client.get(self.REVERSE_POST_DETAIL)
-        get_context = response.context['comments']
+        get_comment_context = response.context['comments']
         test_comments_detail = {
-            get_context: self.comment.text,
+            get_comment_context: self.comment.text,
         }
         for value, expected in test_comments_detail.items():
             self.assertEqual(test_comments_detail[value], expected)
@@ -140,11 +130,11 @@ class PostsViewsTest(TestCase):
     def test_post_detail_page_show_correct_context(self):
         """Шаблон post_detail сформирован с правильным контекстом."""
         response = self.authorized_client.get(self.REVERSE_POST_DETAIL)
-        get_context = response.context['post']
-        test_post_detail = {get_context.text: self.post.text,
-                            get_context.group: self.post.group,
-                            get_context.author: self.post.author,
-                            get_context.image: self.post.image,
+        get_post_context = response.context['post']
+        test_post_detail = {get_post_context.text: self.post.text,
+                            get_post_context.group: self.post.group,
+                            get_post_context.author: self.post.author,
+                            get_post_context.image: self.post.image,
                             }
         for value, expected in test_post_detail.items():
             self.assertEqual(test_post_detail[value], expected)
@@ -197,12 +187,10 @@ class FollowTest(TestCase):
             'posts:profile_unfollow',
             kwargs={'username': cls.auth_user_author.username}
         )
-
-    def setUp(self):
-        self.authorized_client = Client()
-        self.authorized_client.force_login(self.auth_user)
-        self.authorized_client_author = Client()
-        self.authorized_client_author.force_login(self.auth_user_author)
+        cls.authorized_client = Client()
+        cls.authorized_client.force_login(cls.auth_user)
+        cls.authorized_client_author = Client()
+        cls.authorized_client_author.force_login(cls.auth_user_author)
 
     def test_auth_user_can_follow_and_unfollow_users(self):
         """Авторизованный пользователь может

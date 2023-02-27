@@ -8,7 +8,10 @@ from .constants import (
     CREATE_POST_URL,
     GROUP_LIST_URL,
     PROFILE_URL,
-    POST_COMMENT
+    POST_COMMENT,
+    FOLLOW_PAGE,
+    PROFILE_FOLLOW,
+    PROFILE_UNFOLLOW
 )
 
 
@@ -22,7 +25,11 @@ class RoutesTests(TestCase):
             (f'/posts/{POST_ID}/', 'post_detail', [POST_ID]),
             (PROFILE_URL, 'profile', [USERNAME]),
             (f'/posts/{POST_ID}/edit/', 'post_edit', [POST_ID]),
-            (POST_COMMENT, 'add_comment', [POST_ID])
+            (POST_COMMENT, 'add_comment', [POST_ID]),
+            (FOLLOW_PAGE, 'follow_index', []),
+            (PROFILE_FOLLOW, 'profile_follow', [USERNAME]),
+            (PROFILE_UNFOLLOW, 'profile_unfollow', [USERNAME])
+
 
         ]
         for url, page_name, args in routes:

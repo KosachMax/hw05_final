@@ -9,7 +9,7 @@ from posts.models import (
 )
 
 
-class PostModelTest(TestCase):
+class PostAppModelTest(TestCase):
     CUSTOM_POST_NUM = 15
 
     @classmethod
@@ -33,8 +33,12 @@ class PostModelTest(TestCase):
     def test_models_have_correct_object_names(self):
         """Проверка корректности работы __str__."""
         field_help_texts = {
-            self.post.text[:PostModelTest.CUSTOM_POST_NUM]: str(self.post),
-            self.group.title: str(self.group),
+            self.post.text[:PostAppModelTest.CUSTOM_POST_NUM]:
+                str(self.post),
+            self.group.title:
+                str(self.group),
+            self.comment.text[:PostAppModelTest.CUSTOM_POST_NUM]:
+                str(self.comment)
         }
         for field, expected_value in field_help_texts.items():
             with self.subTest(field=field):

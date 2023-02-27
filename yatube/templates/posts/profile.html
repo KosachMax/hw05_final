@@ -1,24 +1,27 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}
-	Профайл пользователя {{ author.get_full_name }}
+  Профайл пользователя {{ author.get_full_name }}
 {% endblock %}
 <div class="mb-5">
-	{% block heading %}
-		<h1>Все посты пользователя {{ author.get_full_name }} </h1>
-	{% endblock %}
-	{% block content %}
-		<h3>Всего постов: {{ post.count }} </h3>
-		{% include 'posts/includes/follow_button.html' %}
-		{% for post in page_obj %}
-			{% include 'includes/post.html' %}
-			<a href="{% url 'posts:post_detail' post.id %}">подробная информация</a><br>
-			{% if post.group %}
-				<a href="{% url 'posts:group_list' post.group.slug %}">все записи группы</a>
-			{% endif %}
-			{% if not forloop.last %}
-				<hr>{% endif %}
-		{% endfor %}
-		{% include 'posts/includes/paginator.html' %}
-		</div>
-	{% endblock %}
+  {% block heading %}
+    <h1>Все посты пользователя {{ author.get_full_name }} </h1>
+  {% endblock %}
+  {% block content %}
+    <h5>Всего постов: {{ author.posts.count }} </h5>
+    <h5>Всего подписок: {{ author.follower.count }} </h5>
+    <h5>Всего подписчиков: {{ author.following.count }} </h5>
+    <h5>Всего комментариев: {{ author.comments.count }} </h5>
+    {% include 'posts/includes/follow_button.html' %}
+    {% for post in page_obj %}
+      {% include 'includes/post.html' %}
+      <a href="{% url 'posts:post_detail' post.id %}">подробная информация</a><br>
+      {% if post.group %}
+        <a href="{% url 'posts:group_list' post.group.slug %}">все записи группы</a>
+      {% endif %}
+      {% if not forloop.last %}
+        <hr>{% endif %}
+    {% endfor %}
+    {% include 'posts/includes/paginator.html' %}
+    </div>
+  {% endblock %}
