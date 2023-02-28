@@ -121,6 +121,7 @@ def profile_follow(request, username):
                 username=username
             )
         )
+        return redirect('posts:profile', username)
     return redirect('posts:profile', username)
 
 

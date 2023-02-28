@@ -30,6 +30,9 @@ class Group(models.Model):
 
 
 class Post(CreatedModel):
+
+    CUSTOM_POST_NUM = 15
+
     text = models.TextField(
         verbose_name='Текст поста',
         help_text='Напишите, о чем сейчас думаете'
