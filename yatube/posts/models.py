@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.db.models import UniqueConstraint
 
 from core.models import CreatedModel
 
@@ -114,12 +113,16 @@ class Follow(CreatedModel):
     )
 
     class Meta:
+        ordering = ('-created',)
         constraints = [
-            UniqueConstraint(
+            models.UniqueConstraint(
                 fields=['user', 'author'],
                 name='unique_follow_set'
+            ),
+            models.CheckConstraint(
+                check=~models.Q(author=models.F('user')),
+                name='User can not follow yourself'
             )
         ]
-        ordering = ('-created',)
         verbose_name = 'Избранный автор'
         verbose_name_plural = 'Избранные авторы'
