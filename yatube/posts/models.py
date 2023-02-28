@@ -112,12 +112,14 @@ class Follow(CreatedModel):
         verbose_name='На кого подписывается',
         help_text='Тут указывается на кого подписывается'
     )
-    UniqueConstraint(
-        fields=['user', 'author'],
-        name='unique_follow_set'
-    )
 
     class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=['user', 'author'],
+                name='unique_follow_set'
+            )
+        ]
         ordering = ('-created',)
         verbose_name = 'Избранный автор'
         verbose_name_plural = 'Избранные авторы'

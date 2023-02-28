@@ -130,11 +130,11 @@ class PostsViewsTest(TestCase):
     def test_post_detail_page_show_correct_context(self):
         """Шаблон post_detail сформирован с правильным контекстом."""
         response = self.authorized_client.get(self.REVERSE_POST_DETAIL)
-        get_post_context = response.context['post']
-        test_post_detail = {get_post_context.text: self.post.text,
-                            get_post_context.group: self.post.group,
-                            get_post_context.author: self.post.author,
-                            get_post_context.image: self.post.image,
+        post = response.context['post']
+        test_post_detail = {post.text: self.post.text,
+                            post.group: self.post.group,
+                            post.author: self.post.author,
+                            post.image: self.post.image,
                             }
         for value, expected in test_post_detail.items():
             self.assertEqual(test_post_detail[value], expected)

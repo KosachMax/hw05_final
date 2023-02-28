@@ -6,10 +6,10 @@
   Последние обновления на сайте
 {% endblock %}
 {% block content %}
-  {% include 'posts/includes/switcher.html' %}
-  {% for post in page_obj %}
-    {% load cache %}
-    {% cache 20 index_page %}
+  {% include 'posts/includes/switcher.html' with following=True %}
+  {% load cache %}
+  {% cache 20 index_page %}
+    {% for post in page_obj %}
       {% include 'includes/post.html' %}
       <a href="{% url 'posts:post_detail' post.id %}">подробная информация</a><br>
       {% if post.group %}
@@ -17,7 +17,7 @@
       {% endif %}
       {% if not forloop.last %}
         <hr>{% endif %}
-    {% endcache %}
-  {% endfor %}
-  {% include 'posts/includes/paginator.html' %}
+    {% endfor %}
+    {% include 'posts/includes/paginator.html' %}
+  {% endcache %}
 {% endblock %}
