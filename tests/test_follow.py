@@ -41,7 +41,7 @@ class TestFollow:
         model_name = 'Follow'
         related_name = 'follower' if field_name == 'user' else 'following'
         checking_field = search_field(Follow._meta.fields, field_name)
-        field_in_model_text = (f'Поле `{field_name}` в модели `{model_name}`')
+        field_in_model_text = f'Поле `{field_name}` в модели `{model_name}`'
         assert checking_field is not None, (
             f'{field_in_model_text} отсутствует в модели или переименовано. '
         )

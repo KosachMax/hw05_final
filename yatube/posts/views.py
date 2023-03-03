@@ -29,11 +29,9 @@ def profile(request, username):
     template = 'posts/profile.html'
     author = get_object_or_404(User, username=username)
     posts = author.posts.select_related('author', 'group')
-    following = False
-    if request.user.is_authenticated and request.user != author:
-        following = Follow.objects.select_related(
-            'user', 'author'
-        ).exists()
+    following = request.user.is_authenticated and author.following.filter(
+        user=request.user
+    ).exists()
     context = {
         'author': author,
         'following': following,
@@ -113,15 +111,15 @@ def follow_index(request):
 
 @login_required
 def profile_follow(request, username):
-    if username != request.user.username:
-        Follow.objects.get_or_create(
-            user=request.user,
-            author=get_object_or_404(
-                User,
-                username=username
-            )
-        )
+    if username == request.user.username:
         return redirect('posts:profile', username)
+    Follow.objects.get_or_create(
+        user=request.user,
+        author=get_object_or_404(
+            User,
+            username=username
+        )
+    )
     return redirect('posts:profile', username)
 
 

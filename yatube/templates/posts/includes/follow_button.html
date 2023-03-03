@@ -1,15 +1,15 @@
 {% if user.is_authenticated %}
-  {% if author != user %}
+  {% if author != request.user %}
     {% if following %}
       <a
-        class="btn btn-lg btn-outline-danger"
+        class="btn btn-lg btn-light"
         href="{% url 'posts:profile_unfollow' author.username %}" role="button"
       >
         Отписаться
       </a>
     {% else %}
       <a
-        class="btn btn-lg btn-outline-primary"
+        class="btn btn-lg btn-primary"
         href="{% url 'posts:profile_follow' author.username %}" role="button"
       >
         Подписаться

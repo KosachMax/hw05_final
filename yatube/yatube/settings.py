@@ -15,6 +15,8 @@ SECRET_KEY = '0m=8euax@3rpd!e@6-blm4h@u=fbfkbacjwo-@98o8p5k4o8)='
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    'www.maximkosach.pythonanywhere.com',
+    'maximkosach.pythonanywhere.com',
     'localhost',
     '127.0.0.1',
     '[::1]',
@@ -45,7 +47,9 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'core.apps.CoreConfig',
 
-    'sorl.thumbnail'
+    'sorl.thumbnail',
+
+    'debug_toolbar'
 ]
 
 CACHES = {
@@ -62,6 +66,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+]
+
+INTERNAL_IPS = [
+    '127.0.0.1',
 ]
 
 ROOT_URLCONF = 'yatube.urls'
