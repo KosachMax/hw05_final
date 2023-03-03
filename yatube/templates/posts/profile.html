@@ -13,11 +13,14 @@
     <h5>Всего подписчиков: {{ author.following.count }} </h5>
     <h5>Всего комментариев: {{ author.comments.count }} </h5>
     {% include 'posts/includes/follow_button.html' %}
+    <h5></h5>
     {% for post in page_obj %}
       {% include 'includes/post.html' %}
-      <a href="{% url 'posts:post_detail' post.id %}">подробная информация</a><br>
+      <a class="btn btn-outline-dark"
+         href="{% url 'posts:post_detail' post.id %}">подробная информация</a>
       {% if post.group %}
-        <a href="{% url 'posts:group_list' post.group.slug %}">все записи группы</a>
+        <a class="btn btn-outline-dark"
+           href="{% url 'posts:group_list' post.group.slug %}">все записи группы</a>
       {% endif %}
       {% if not forloop.last %}
         <hr>{% endif %}

@@ -2,14 +2,14 @@
   {% if author != request.user %}
     {% if following %}
       <a
-        class="btn btn-lg btn-light"
+        class="btn btn-outline-danger"
         href="{% url 'posts:profile_unfollow' author.username %}" role="button"
       >
         Отписаться
       </a>
     {% else %}
       <a
-        class="btn btn-lg btn-primary"
+        class="btn btn-primary"
         href="{% url 'posts:profile_follow' author.username %}" role="button"
       >
         Подписаться
@@ -17,4 +17,3 @@
     {% endif %}
   {% endif %}
 {% endif %}
-

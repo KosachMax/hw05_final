@@ -5,14 +5,15 @@
 {% endblock %}
 {% block heading %}
   <h1>{{ group.title }}</h1>
-  <p>{{ group.description|linebreaks }}</p>
+  <h5>{{ group.description|linebreaks }}</h5>
 {% endblock %}
 {% block content %}
   <div class="container py-5">
     {% for post in page_obj %}
       {% include 'includes/post.html' %}
       {% if not forloop.last %}
-        <hr>{% endif %}
+        <hr style="height:3px; background-color: #000000">
+      {% endif %}
     {% endfor %}
     {% include 'posts/includes/paginator.html' %}
   </div>

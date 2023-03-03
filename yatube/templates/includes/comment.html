@@ -13,18 +13,17 @@
 	</div>
 </div>
 {% endif %}
-
 {% for comment in comments %}
-<div class="media mb-4">
-	<div class="media-body">
-		<h5 class="mt-0">
-			<a href="{% url 'posts:profile' comment.author.username %}">
-				{{ comment.author.username }}
+<div class="card">
+      <div class="card-header">
+			<a class="btn btn-outline-dark"
+         href="{% url 'posts:profile' comment.author.username %}">
+				 <b><span>{{ comment.author.username }}</span> </b>
 			</a>
-		</h5>
-		<p>
+      </div>
+		<div class="card-body">
 			{{ comment.text }}
-		</p>
+
 	</div>
 </div>
 {% endfor %}

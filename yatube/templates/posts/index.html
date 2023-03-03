@@ -6,17 +6,19 @@
   Последние обновления на сайте
 {% endblock %}
 {% block content %}
-  {% include 'posts/includes/switcher.html' with following=True %}
+    {% include 'posts/includes/switcher.html' with following=True %}
   {% load cache %}
   {% cache 20 index_page %}
     {% for post in page_obj %}
       {% include 'includes/post.html' %}
-      <a href="{% url 'posts:post_detail' post.id %}">подробная информация</a><br>
+      <a class="btn btn-outline-dark center"
+         href="{% url 'posts:post_detail' post.id %}">подробная информация</a>
       {% if post.group %}
-        <a href="{% url 'posts:group_list' post.group.slug %}">все записи группы</a>
+        <a class="btn btn-outline-dark center"
+           href="{% url 'posts:group_list' post.group.slug %}">все записи группы</a>
       {% endif %}
       {% if not forloop.last %}
-        <hr>{% endif %}
+        <h2></h2>{% endif %}
     {% endfor %}
     {% include 'posts/includes/paginator.html' %}
   {% endcache %}
